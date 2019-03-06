@@ -2,6 +2,24 @@ ready(function(){
 
   // В этом месте должен быть написан ваш код
 
+  // burger menu
+ const burgerBtn = document.querySelector('.burger');
+
+ function navChange() {
+
+  const burgerMenu = document.getElementById('nav');
+  burgerMenu.addEventListener('click', function() {
+    this.classList.toggle('main-nav--open');
+    burgerBtn.classList.toggle('burger--close')
+  })
+
+ }
+
+ burgerBtn.addEventListener('click', function(e) {
+  e.preventDefault();
+  navChange();
+});
+
 
 
   // ВНИМАНИЕ!
@@ -12,13 +30,13 @@ ready(function(){
 
   // Кастомные селекты (кроме выбора языка)
   new Choices('.field-select:not(#lang) select.field-select__select', {
-    searchEnabled: false,
-    shouldSort: false,
+    searchEnabled: true,
+    shouldSort: true,
   });
   // Кастомный селект выбора языка отдельно
   new Choices('#lang select.field-select__select', {
-    searchEnabled: false,
-    shouldSort: false,
+    searchEnabled: true,
+    shouldSort: true,
     callbackOnCreateTemplates: function (template) {
       return {
         item: (classNames, data) => {
