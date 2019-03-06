@@ -3,23 +3,24 @@ ready(function(){
   // В этом месте должен быть написан ваш код
 
   // burger menu
- const burgerBtn = document.querySelector('.burger');
-
- function navChange() {
-
+  const burgerBtn = document.querySelector('.burger');
   const burgerMenu = document.getElementById('nav');
+
   burgerMenu.addEventListener('click', function() {
     this.classList.toggle('main-nav--open');
     burgerBtn.classList.toggle('burger--close')
-  })
+  });
 
- }
 
- burgerBtn.addEventListener('click', function(e) {
-  e.preventDefault();
-  navChange();
-});
+  // filter switcher
 
+  const filterSwitcher = document.getElementById('filters');
+
+  filterSwitcher.addEventListener('click', function() {
+    this.classList.toggle('filters--open');
+  });
+
+ 
 
 
   // ВНИМАНИЕ!
