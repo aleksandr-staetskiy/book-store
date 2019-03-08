@@ -47,6 +47,32 @@ ready(function () {
   document.querySelector('.catalog__books-list').appendChild(fragment);
 
 
+    // popup
+
+    const cardLink = document.querySelector('.card__inner');
+    const page = document.querySelector('.page');
+    const modal = document.getElementById('modal-book-view');
+    const closeBtnPopup = document.querySelector('.modal__close');
+    // const closePopupAround = document.querySelector('.modal');
+  
+    // closePopupAround.addEventListener('click', closeModal);
+    closeBtnPopup.addEventListener('click', closeModal);
+    cardLink.addEventListener('click', openModal);
+  
+    function openModal() {
+      page.classList.toggle('js-modal-open');
+      modal.classList.toggle('modal--open');
+    }
+  
+    function closeModal() {
+      page.classList.remove('js-modal-open');
+      modal.classList.remove('modal--open');
+    }
+
+  
+  
+  
+
 
 
 
