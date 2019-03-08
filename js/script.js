@@ -15,10 +15,23 @@ ready(function(){
   // filter switcher
 
   const filterSwitcher = document.getElementById('filters');
+  const fitltetsTrigger = document.getElementById('filters-trigger');
 
-  filterSwitcher.addEventListener('click', function() {
-    this.classList.toggle('filters--open');
+  function callFilter() {
+    filterSwitcher.classList.toggle('filters--open');
+  }
+
+  fitltetsTrigger.addEventListener('click', function() {
+    callFilter();
   });
+  
+
+  // card rendering
+
+  const fragment = document.createDocumentFragment();
+  const booksCard = document.querySelector('')
+
+
 
  
 
