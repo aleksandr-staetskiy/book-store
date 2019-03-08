@@ -1,4 +1,4 @@
-ready(function(){
+ready(function () {
 
   // В этом месте должен быть написан ваш код
 
@@ -6,7 +6,7 @@ ready(function(){
   const burgerBtn = document.querySelector('.burger');
   const burgerMenu = document.getElementById('nav');
 
-  burgerMenu.addEventListener('click', function() {
+  burgerMenu.addEventListener('click', function () {
     this.classList.toggle('main-nav--open');
     burgerBtn.classList.toggle('burger--close')
   });
@@ -21,19 +21,37 @@ ready(function(){
     filterSwitcher.classList.toggle('filters--open');
   }
 
-  fitltetsTrigger.addEventListener('click', function() {
-    callFilter();
-  });
-  
+  fitltetsTrigger.addEventListener('click', callFilter);
+
 
   // card rendering
 
   const fragment = document.createDocumentFragment();
-  const booksCard = document.querySelector('')
+  const bookCard = document.querySelector('.card');
+
+  books.forEach(function (item) {
+    const newCard = bookCard.cloneNode(true);
+
+    newCard.querySelector('.card__title').textContent = item.name
+    newCard.querySelector('.card__price').textContent = item.price
+    newCard.querySelector('.card__img').src = item.uri
+
+    // if ( item.new === true ) {
+    //   newCard.classList.add('card__new');
+    // }
+
+    fragment.appendChild(newCard);
+
+  })
+
+  document.querySelector('.catalog__books-list').appendChild(fragment);
 
 
 
- 
+
+
+
+
 
 
   // ВНИМАНИЕ!
@@ -44,28 +62,28 @@ ready(function(){
 
   // Кастомные селекты (кроме выбора языка)
   new Choices('.field-select:not(#lang) select.field-select__select', {
-    searchEnabled: true,
-    shouldSort: true,
+    searchEnabled: false,
+    shouldSort: false,
   });
   // Кастомный селект выбора языка отдельно
   new Choices('#lang select.field-select__select', {
-    searchEnabled: true,
-    shouldSort: true,
+    searchEnabled: false,
+    shouldSort: false,
     callbackOnCreateTemplates: function (template) {
       return {
         item: (classNames, data) => {
           return template(`
-            <div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
-              ${getLangInSelectIcon(data.value)} ${data.label.substr(0,3)}
-            </div>
-          `);
+			<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
+				${getLangInSelectIcon(data.value)} ${data.label.substr(0, 3)}
+			</div>
+			`);
         },
         choice: (classNames, data) => {
           return template(`
-            <div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${this.config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
-              ${getLangInSelectIcon(data.value)} ${data.label}
-            </div>
-          `);
+			<div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${this.config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
+				${getLangInSelectIcon(data.value)} ${data.label}
+			</div>
+			`);
         },
       };
     }
@@ -90,8 +108,8 @@ ready(function(){
 
 });
 
-function ready (fn) {
-  if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading'){
+function ready(fn) {
+  if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading') {
     fn();
   } else {
     document.addEventListener('DOMContentLoaded', fn);
