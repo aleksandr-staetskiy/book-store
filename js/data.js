@@ -1,11 +1,11 @@
 const books = [
-  {
-    "name":"Клиенты на всю жизнь",
-    "desc":"",
-    "price":697,
-    "uri":"klienty-na-vsyu-zhizn",
-    "type":"marketing"
-  },
+  // {
+  //   "name":"Клиенты на всю жизнь",
+  //   "desc":"",
+  //   "price":697,
+  //   "uri":"klienty-na-vsyu-zhizn",
+  //   "type":"marketing"
+  // },
   {
     "name":"Ценные решения",
     "desc":"Как работать с ценами, чтобы прибыль росла",

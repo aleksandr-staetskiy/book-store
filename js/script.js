@@ -1,84 +1,135 @@
-ready(function () {
-
+ready(function() {
   // В этом месте должен быть написан ваш код
 
   // burger menu
-  const burgerBtn = document.querySelector('.burger');
-  const burgerMenu = document.getElementById('nav');
+  function burgerMenu() {
+    const burgerBtn = document.querySelector(".burger");
+    const burgerMenu = document.getElementById("nav");
 
-  burgerMenu.addEventListener('click', function () {
-    this.classList.toggle('main-nav--open');
-    burgerBtn.classList.toggle('burger--close')
-  });
+    burgerMenu.addEventListener("click", function() {
+      this.classList.toggle("main-nav--open");
+      burgerBtn.classList.toggle("burger--close");
+    });
+  }
 
+  burgerMenu();
 
   // filter switcher
 
-  const filterSwitcher = document.getElementById('filters');
-  const fitltetsTrigger = document.getElementById('filters-trigger');
+  const filterSwitcher = document.getElementById("filters");
+  const fitltetsTrigger = document.getElementById("filters-trigger");
 
   function callFilter() {
-    filterSwitcher.classList.toggle('filters--open');
+    filterSwitcher.classList.toggle("filters--open");
   }
 
-  fitltetsTrigger.addEventListener('click', callFilter);
-
+  fitltetsTrigger.addEventListener("click", callFilter);
 
   // card rendering
 
   const fragment = document.createDocumentFragment();
-  const bookCard = document.querySelector('.card');
+  const bookCard = document.querySelector(".card");
 
-  books.forEach(function (item) {
+  books.forEach(function(item) {
     const newCard = bookCard.cloneNode(true);
 
-    newCard.querySelector('.card__title').textContent = item.name
-    newCard.querySelector('.card__price').textContent = item.price
-    newCard.querySelector('.card__img').src = item.uri
+    newCard.dataset.uri = item.uri;
+    newCard.querySelector(".card__title").textContent = item.name;
+    newCard.querySelector(".card__price").textContent = item.price;
+    newCard.querySelector(".card__img").src = `img/${item.uri}.jpg`;
 
     // if ( item.new === true ) {
     //   newCard.classList.add('card__new');
     // }
 
     fragment.appendChild(newCard);
+  });
 
-  })
+  document.querySelector(".catalog__books-list").appendChild(fragment);
 
-  document.querySelector('.catalog__books-list').appendChild(fragment);
+  // popup
 
+  const cardLink = document.querySelectorAll(".card");
+  const page = document.querySelector(".page");
+  const modal = document.getElementById("modal-book-view");
+  const closeBtnPopup = document.querySelector(".modal__close");
+  const closePopupAround = document.querySelector(".modal");
 
-    // popup
+  for (let i = 0; i < cardLink.length; i++) {
+    cardLink[i].addEventListener("click", openModal);
+  }
 
-    const cardLink = document.querySelector('.card__inner');
-    const page = document.querySelector('.page');
-    const modal = document.getElementById('modal-book-view');
-    const closeBtnPopup = document.querySelector('.modal__close');
-    // const closePopupAround = document.querySelector('.modal');
-  
-    // closePopupAround.addEventListener('click', closeModal);
-    closeBtnPopup.addEventListener('click', closeModal);
-    cardLink.addEventListener('click', openModal);
-  
-    function openModal() {
-      page.classList.toggle('js-modal-open');
-      modal.classList.toggle('modal--open');
+  closePopupAround.addEventListener("click", function(e) {
+    // проверить был ли клик вне зоны контента
+    // как понять где был клик : e.target
+
+    if (e.target === closePopupAround) {
+      closeModal();
     }
-  
-    function closeModal() {
-      page.classList.remove('js-modal-open');
-      modal.classList.remove('modal--open');
+  });
+  closeBtnPopup.addEventListener("click", closeModal);
+
+  function openModal() {
+    page.classList.toggle("js-modal-open");
+    modal.classList.toggle("modal--open");
+  }
+
+  function closeModal() {
+    page.classList.remove("js-modal-open");
+    modal.classList.remove("modal--open");
+  }
+
+  // popup info rendering
+
+  // const modalInfoFragment = document.createDocumentFragment();
+  // cardLink.forEach(function(item) {
+  //   const newModal = modal.cloneNode(true);
+
+  //   newModal.querySelector(".product__title").textContent = item.name;
+  //   // newModal.querySelector('.card__price').textContent = item.price
+  //   newModal.querySelector(".product__img-wrap").src = `img/${item.uri}.jpg`;
+
+  //   // if ( item.new === true ) {
+  //   //   newCard.classList.add('card__new');
+  //   // }
+
+  //   modalInfoFragment.appendChild(newModal);
+  // });
+
+  // document.querySelector(".modal").appendChild(modalInfoFragment);
+
+  // amount of cards
+
+  const showBooksAmount = document.getElementById("books-num");
+  showBooksAmount.innerHTML = cardLink.length;
+
+  // filter search
+
+  const nameInput = document.getElementById("book-name");
+  const booksCatalogue = document.querySelector(".catalog__books-list");
+
+  // -> .name
+  // -> .value
+
+  // for ()
+  //   isMatch(book.name, input.value)
+
+  // @param {string} - needle, what we looking for
+  // @param {string} - haystack, where we looking for
+  function isMatch(needle, haystack) {
+    for (let j = 0; j < nameInput.length; j++) {
+      for (let i = 0; i < booksCatalogue.length; i++) {
+        if (booksCatalogue[i] === nameInput[j]) {
+          break;
+        }
+      }
+      if (i === booksCatalogue.length) {
+        return false;
+      }
     }
 
-  
-  
-  
-
-
-
-
-
-
-
+    return true;
+  }
 
   // ВНИМАНИЕ!
   // Нижеследующий код (кастомный селект и выбор диапазона цены) работает
@@ -87,57 +138,75 @@ ready(function () {
   // браузера не было ошибок.
 
   // Кастомные селекты (кроме выбора языка)
-  new Choices('.field-select:not(#lang) select.field-select__select', {
+  new Choices(".field-select:not(#lang) select.field-select__select", {
     searchEnabled: false,
-    shouldSort: false,
+    shouldSort: false
   });
   // Кастомный селект выбора языка отдельно
-  new Choices('#lang select.field-select__select', {
+  new Choices("#lang select.field-select__select", {
     searchEnabled: false,
     shouldSort: false,
-    callbackOnCreateTemplates: function (template) {
+    callbackOnCreateTemplates: function(template) {
       return {
         item: (classNames, data) => {
           return template(`
-			<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
+			<div class="${classNames.item} ${
+            data.highlighted
+              ? classNames.highlightedState
+              : classNames.itemSelectable
+          }" data-item data-id="${data.id}" data-value="${data.value}" ${
+            data.active ? 'aria-selected="true"' : ""
+          } ${data.disabled ? 'aria-disabled="true"' : ""}>
 				${getLangInSelectIcon(data.value)} ${data.label.substr(0, 3)}
 			</div>
 			`);
         },
         choice: (classNames, data) => {
           return template(`
-			<div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${this.config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
+			<div class="${classNames.item} ${classNames.itemChoice} ${
+            data.disabled ? classNames.itemDisabled : classNames.itemSelectable
+          }" data-select-text="${this.config.itemSelectText}" data-choice ${
+            data.disabled
+              ? 'data-choice-disabled aria-disabled="true"'
+              : "data-choice-selectable"
+          } data-id="${data.id}" data-value="${data.value}" ${
+            data.groupId > 0 ? 'role="treeitem"' : 'role="option"'
+          }>
 				${getLangInSelectIcon(data.value)} ${data.label}
 			</div>
 			`);
-        },
+        }
       };
     }
   });
   function getLangInSelectIcon(value) {
-    if (value == 'ru') return '<span class="field-select__lang-ru"></span>';
-    else if (value == 'en') return '<span class="field-select__lang-en"></span>';
+    if (value == "ru") return '<span class="field-select__lang-ru"></span>';
+    else if (value == "en")
+      return '<span class="field-select__lang-en"></span>';
     return '<span class="field-select__lang-null"></span>';
   }
 
   // Выбор диапазона цен
-  var slider = document.getElementById('price-range');
+  var slider = document.getElementById("price-range");
   noUiSlider.create(slider, {
     start: [400, 1000],
     connect: true,
     step: 100,
     range: {
-      'min': 200,
-      'max': 2000
+      min: 200,
+      max: 2000
     }
   });
-
 });
 
 function ready(fn) {
-  if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading') {
+  if (
+    document.attachEvent
+      ? document.readyState === "complete"
+      : document.readyState !== "loading"
+  ) {
     fn();
   } else {
-    document.addEventListener('DOMContentLoaded', fn);
+    document.addEventListener("DOMContentLoaded", fn);
   }
 }
