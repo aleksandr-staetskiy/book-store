@@ -1628,7 +1628,16 @@ a.pagination__item:hover, a.pagination__item:focus {
   margin: 0 0 30px;
   font-size: 28px; }
 .popular__slider {
-  position: relative; }
+overflow: hidden; }
+.popular__wrapper{
+  left: 0;
+  transition: all 1s ease;
+  overflow: hidden;
+  display: flex;
+  position: relative;}
+  .popular__slide {
+    width: 100%;
+  }
 .popular__slider-btn {
   position: absolute;
   z-index: 2;

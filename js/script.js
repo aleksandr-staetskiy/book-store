@@ -1,7 +1,11 @@
 ready(function() {
-  // В этом месте должен быть написан ваш код
 
-  // burger menu
+  let booksByUri = {};
+
+  books.forEach(function(item) {
+    booksByUri[item.uri] = item;
+  });
+
   function burgerMenu() {
     const burgerBtn = document.querySelector(".burger");
     const burgerMenu = document.getElementById("nav");
@@ -25,12 +29,15 @@ ready(function() {
 
   fitltetsTrigger.addEventListener("click", callFilter);
 
+  // getting 10 books from array
+  let newArr = books.slice(0, 11);
+
   // card rendering
 
   const fragment = document.createDocumentFragment();
   const bookCard = document.querySelector(".card");
 
-  books.forEach(function(item) {
+  newArr.forEach(function(item) {
     const newCard = bookCard.cloneNode(true);
 
     newCard.dataset.uri = item.uri;
@@ -46,6 +53,10 @@ ready(function() {
   });
 
   document.querySelector(".catalog__books-list").appendChild(fragment);
+
+  // delete first card
+
+  
 
   // popup
 
@@ -69,9 +80,12 @@ ready(function() {
   });
   closeBtnPopup.addEventListener("click", closeModal);
 
-  function openModal() {
+  function openModal(event) {
+    let uri = event.currentTarget.dataset.uri;
+    let book = booksByUri[uri];
     page.classList.toggle("js-modal-open");
     modal.classList.toggle("modal--open");
+    fillModal(book);
   }
 
   function closeModal() {
@@ -79,24 +93,15 @@ ready(function() {
     modal.classList.remove("modal--open");
   }
 
-  // popup info rendering
+  function fillModal(book) {
+    let popup = document.querySelector(".modal__content");
 
-  // const modalInfoFragment = document.createDocumentFragment();
-  // cardLink.forEach(function(item) {
-  //   const newModal = modal.cloneNode(true);
+    popup.querySelector(".product__title").innerHTML = book.name;
+    popup.querySelector(".product__descr p").innerHTML = book.desc;
+    popup.querySelector(".btn--price").firstChild.nodeValue = `${book.price}₽`;
 
-  //   newModal.querySelector(".product__title").textContent = item.name;
-  //   // newModal.querySelector('.card__price').textContent = item.price
-  //   newModal.querySelector(".product__img-wrap").src = `img/${item.uri}.jpg`;
-
-  //   // if ( item.new === true ) {
-  //   //   newCard.classList.add('card__new');
-  //   // }
-
-  //   modalInfoFragment.appendChild(newModal);
-  // });
-
-  // document.querySelector(".modal").appendChild(modalInfoFragment);
+    popup.querySelector(".product__img-wrap img").src = `img/${book.uri}.jpg`;
+  }
 
   // amount of cards
 
@@ -107,6 +112,10 @@ ready(function() {
 
   const nameInput = document.getElementById("book-name");
   const booksCatalogue = document.querySelector(".catalog__books-list");
+
+  nameInput.addEventListener("input", () => {
+    console.log(nameInput.value);
+  });
 
   // -> .name
   // -> .value
